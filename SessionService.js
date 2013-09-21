@@ -5,14 +5,14 @@ angular.module('spp.params', []).
     'use strict';
 
     var NotifierService = this.NotifierService || $log.error;
-    var allProperties = this.parameters;
+    var expectedParameters = this.parameters;
     var localStorageId = this.localStorageId;
 
     if (!$window.localStorage) {
       return $log.debug('spp.params requires localStorage support.');
     }
 
-    if (!allProperties) {
+    if (!expectedParameters) {
       return $log.debug('spp.params requires a list of properties.');
     }
 
@@ -20,22 +20,20 @@ angular.module('spp.params', []).
       return $log.debug('spp.params requires a localStorage id.');
     }
 
-    var api = {
-      detect: detect,
-      set: set,
-      get: get
-    };
-
     var properties = $window.localStorage.getItem(localStorageId);
     properties = properties ? JSON.parse(properties) : {};
 
-    var keys = allProperties.map(function (property) {
-      return property.parameter.toLowerCase();
+    var keys = expectedParameters.map(function (property) {
+      return property.name.toLowerCase();
     });
 
     var parameters = {};
 
-    return api;
+    return {
+      readParams: readParams,
+      set: set,
+      get: get
+    };
 
 
     function buildParameterObject(params) {
@@ -44,24 +42,24 @@ angular.module('spp.params', []).
       });
     }
 
-    function detectProperty(property) {
-      var key = property.parameter.toLowerCase();
+    function readParameter(parameter) {
+      var key = parameter.name.toLowerCase();
       var value = parameters[key];
 
       if (value) {
-        api.set(key, value);
+        set(key, value);
       }
 
-      if (property.required && !properties[key]) {
-        NotifierService(property.parameter + ' is required.',
+      if (parameter.required && !properties[key]) {
+        NotifierService(parameter.name + ' is required.',
           'Missing URL Parameter');
       }
     }
 
-    function detect() {
+    function readParams() {
       buildParameterObject($location.search() || {});
 
-      angular.forEach(allProperties, detectProperty);
+      angular.forEach(expectedParameters, readParameter);
     }
 
     function get(property) {

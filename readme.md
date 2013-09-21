@@ -5,7 +5,7 @@
 
 ## Demo
 
-Check out a really awesome sample application [here](http://jsbin.com/UxEFIgO/2/edit).
+Check out a really awesome sample application [here](http://embed.plnkr.co/FivsKkrRbIkuhfNqTHdG/preview).
 
 
 ## Using spp.params
@@ -28,6 +28,10 @@ Follow along with the sample application below to see how to use `spp.params`.
 angular.module('yourApp', ['spp.params']).
   config(['SessionServiceProvider', function (SessionServiceProvider) {
 
+    // You must define a key where the parameters will be saved into
+    // localStorage.
+    SessionServiceProvider.localStorageId = 'url-parameters';
+
     // SessionService allows you to customize the way warning messages are
     // displayed. Here, we just have a simple wrapper around the function that
     // will be called, `NotifierService`.
@@ -38,33 +42,27 @@ angular.module('yourApp', ['spp.params']).
     // You must specify `parameters` as an array of object in the following
     // format...
     //
-    // parameter {String}  The case-insensitive url parameter you want to cache.
-    // required  {bool}    Should your application display a warning if this
+    // parameter {string}  The case-insensitive url parameter you want to cache.
+    // required  {boolean} Should your application display a warning if this
     //                     parameter isn't specified?
     SessionServiceProvider.parameters = [
       {
-        parameter: 'userId',
+        name: 'userId',
         required: true
       }, {
-        parameter: 'unicornId',
+        name: 'unicornId',
         required: false
       }
     ];
-
-    // You must also define a key where the parameters will be saved into
-    // localStorage.
-    SessionServiceProvider.localStorageId = 'url-parameters';
-
   }]).
-  run(['$rootScope', 'SessionService', function ($rootScope, SessionService) {
+  run(['$rootScope', 'SessionService', '$window', function ($rootScope, SessionService, $window) {
 
     // You can choose when to run `SessionService.detect()`.
     //
     // Here, we're running it as soon as the application runs...
-    SessionService.detect();
+    SessionService.readParams();
 
     // ...as well as every time the route changes.
     $rootScope.$on('$routeChangeSuccess', SessionService.detect);
-
   }]);
 ```
