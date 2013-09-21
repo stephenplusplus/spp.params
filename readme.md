@@ -3,6 +3,11 @@
 > An easy way to save URL parameters to localStorage in your Angular application.
 
 
+## Demo
+
+Check out a really awesome sample application [here](http://jsbin.com/UxEFIgO/2/edit).
+
+
 ## Using spp.params
 
 Using [Bower](http://bower.io), head to your nearest terminal and tap:
