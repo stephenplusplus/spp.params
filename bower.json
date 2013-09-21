@@ -1,0 +1,21 @@
+{
+  "name": "spp.params",
+  "version": "0.0.0",
+  "homepage": "https://github.com/stephenplusplus/spp.params",
+  "authors": [
+    "Stephen Sawchuk <sawchuk@gmail.com>"
+  ],
+  "description": "An easy way to save URL parameters to localStorage in your Angular application.",
+  "main": "SessionService.js",
+  "keywords": [
+    "angular",
+    "localStorage",
+    "querystring",
+    "url",
+    "parameters"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*"
+  ]
+}
