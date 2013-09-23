@@ -39,12 +39,12 @@ angular.module('yourApp', ['spp.params']).
       console.log('This is a custom warning message!', message);
     };
 
-    // You must specify `parameters` as an array of object in the following
+    // You must specify `parameters` as an array of objects in the following
     // format...
     //
-    // parameter {string}  The case-insensitive url parameter you want to cache.
-    // required  {boolean} Should your application display a warning if this
-    //                     parameter isn't specified?
+    // name     {string}  The case-insensitive url parameter you want to cache.
+    // required {boolean} Should your application display a warning if this
+    //                    parameter isn't specified?
     SessionServiceProvider.parameters = [
       {
         name: 'userId',
@@ -55,14 +55,13 @@ angular.module('yourApp', ['spp.params']).
       }
     ];
   }]).
-  run(['$rootScope', 'SessionService', '$window', function ($rootScope, SessionService, $window) {
+  run(['$rootScope', 'SessionService', function ($rootScope, SessionService) {
 
-    // You can choose when to run `SessionService.detect()`.
-    //
-    // Here, we're running it as soon as the application runs...
+    // You must choose when to detect and store parameters. Here, we're running it
+    // as soon as the application runs...
     SessionService.readParams();
 
     // ...as well as every time the route changes.
-    $rootScope.$on('$routeChangeSuccess', SessionService.detect);
+    $rootScope.$on('$routeChangeSuccess', SessionService.readParams);
   }]);
 ```
